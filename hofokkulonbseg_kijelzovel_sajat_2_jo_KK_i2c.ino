@@ -24,7 +24,7 @@ float solarPanelTemperature = 0.0;
 float hotWaterTankTemperature = 0.0;
 LiquidCrystal_I2C lcd(0x27,20,4);
 
-int R1= 1000; // voltage devider resistor
+int R1= 995; // voltage devider resistor
 int Vin= 5; // operating voltage of arduino
 
 struct SensorProperty {
@@ -64,8 +64,10 @@ void setup(){
 
 void loop(){
   // homeresek és skálázások
-  solarPanelTemperature = getTemperature(PANELSENSOR);
-  hotWaterTankTemperature = getTemperature(TANKSENSOR);
+  solarPanelTemperature = getTemperature(PANELSENSOR) ;   
+  hotWaterTankTemperature = getTemperature(TANKSENSOR); 
+  //solarPanelTemperature = analogRead(PANELSENSOR) * (92.0 / 1023.0);
+  //hotWaterTankTemperature = analogRead(TANKSENSOR) * (92.0 / 1023.0);
   Serial.print("solarPanelTemperature: ");
   Serial.print(solarPanelTemperature);
   Serial.print("\t hotWaterTankTemperature: ");
@@ -118,11 +120,11 @@ void loop(){
 float getTemperature(int sensorPin) {
   
   // get currentResistance from sensor
-  int raw= analogRead(sensorPin);
+  int raw = analogRead(sensorPin);
   float buffer = raw * Vin;
-  float Vout= (buffer)/1024.0;
+  float Vout= (buffer)/1023.0;
   buffer = (Vin/Vout) -1;
-  float currentResistance = R1 * buffer;
+  float currentResistance = R1 / buffer;
 
   // calculate temperature based on measured resistance
   SensorProperty propertyBefore = sensorProperties[0];
