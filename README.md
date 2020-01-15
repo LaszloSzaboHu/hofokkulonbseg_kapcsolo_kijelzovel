@@ -1,0 +1,1 @@
+# hofokkulonbseg_kapcsolo_kijelzovel
